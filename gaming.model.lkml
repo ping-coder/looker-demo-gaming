@@ -1,15 +1,17 @@
-connection: "gaming_events"
+connection: "peace-looker-demo-gaming"
 
-include: "/*/*.view.lkml"                       # include all views in this project
-include: "/lookml_dashboards/*.dashboard.lookml"   # include a LookML dashboard called my_dashboard
+include: "/views/*.view.lkml"
+include: "/derived_tables/*.view.lkml"
+#include: "*.dashboard.lookml"   # include a LookML dashboard called my_dashboard
 
 # Model Configuration
-datagroup: events_raw { sql_trigger:  SELECT current_date  ;; }
+datagroup: events_raw { sql_trigger:  SELECT max(event) FROM `se-pbl.gaming_demo_dev.raw_events` WHERE DATE(event) = CURRENT_DATE  ;; }
 named_value_format: large_usd { value_format: "[>=1000000]\"$\"0.00,,\"M\";[>=1000]\"$\"0.00,\"K\";\"$\"0.00" }
 named_value_format: large_number { value_format: "[>=1000000]0.00,,\"M\";[>=1000]0.00,\"K\";0" }
 
 # Explores
 explore: events {
+
   persist_with: events_raw
 
   always_filter: {
@@ -19,11 +21,9 @@ explore: events {
     }
   }
 
-  join: sessions {
-    sql_on: ${events.user_id} = ${sessions.user_id}
-          AND ${events.event_raw} >= ${sessions.session_start_raw}
-          AND ${events.event_raw} <= ${sessions.session_end_raw} ;;
+  join: session_facts {
     relationship: many_to_one
+    sql_on: ${events.unique_session_id} = ${session_facts.unique_session_id} ;;
   }
 
   join: user_facts {
@@ -31,11 +31,16 @@ explore: events {
     relationship: many_to_one
     sql_on: ${events.user_id} = ${user_facts.user_id} ;;
   }
+
+  join: top_countries {
+    sql_on: ${events.country} = ${top_countries.country} ;;
+    relationship: many_to_one
+  }
 }
 
 explore: funnel_explorer {
   description: "Player Session Funnels"
-  persist_for: "24 hours"
+  persist_for: "48 hours"
 
   always_filter: {
     filters: {
@@ -47,18 +52,37 @@ explore: funnel_explorer {
       value: "Lookerwood Farm"
     }
   }
+  join: session_facts {
+    sql_on: ${funnel_explorer.unique_session_id} = ${session_facts.unique_session_id} ;;
+    relationship: many_to_one
+  }
 
   join: user_facts {
     sql_on: ${funnel_explorer.user_id} = ${user_facts.user_id} ;;
     relationship: many_to_one
   }
+
 }
 
-explore: sessions {
+explore: session_facts {
   label: "Sessions and Users"
   description: "Use this to look at a compressed view of Users and Sessions (without event level data)"
   join: user_facts {
     relationship: many_to_one
-    sql_on: ${sessions.user_id} = ${user_facts.user_id} ;;
+    sql_on: ${session_facts.user_id} = ${user_facts.user_id} ;;
+  }
+
+  join: lifetime_user_facts {
+    sql_on: ${session_facts.user_id} = ${lifetime_user_facts.user_id} ;;
+    relationship: many_to_one
+  }
+}
+
+explore: level_balancing {
+  description: "Are players able to progress through levels well? (last 30 days)"
+
+  join: user_facts {
+    relationship: many_to_one
+    sql_on: ${level_balancing.user_id} = ${user_facts.user_id} ;;
   }
 }

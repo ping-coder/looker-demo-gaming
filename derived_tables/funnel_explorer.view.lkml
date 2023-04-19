@@ -7,56 +7,57 @@ view: funnel_explorer {
   # for each event, its first instance occurs before the last instance of the next event in the sequence, then
   # that is considered a completion of the sequence.
   derived_table: {
-    sql: SELECT sessions.unique_session_id as unique_session_id
+    sql: SELECT
+          events_sessionized.unique_session_id
         , events_sessionized.user_id
-        , sessions.session_start AS session_start
+        , session_facts.session_start AS session_start
         , MIN(
             CASE WHEN
-              {% condition event_1 %} events_sessionized.event_name {% endcondition %}
-              THEN events_sessionized.event
+              {% condition event_1 %} event_name {% endcondition %}
+              THEN event
               ELSE NULL END
             ) AS event_1
         , MIN(
             CASE WHEN
-              {% condition event_2 %} events_sessionized.event_name {% endcondition %}
-              THEN events_sessionized.event
+              {% condition event_2 %} event_name {% endcondition %}
+              THEN event
               ELSE NULL END
             ) AS event_2_first
         , MAX(
             CASE WHEN
-              {% condition event_2 %} events_sessionized.event_name {% endcondition %}
-              THEN events_sessionized.event
+              {% condition event_2 %} event_name {% endcondition %}
+              THEN event
               ELSE NULL END
             ) AS event_2_last
         , MIN(
             CASE WHEN
-              {% condition event_3 %} events_sessionized.event_name {% endcondition %}
-              THEN events_sessionized.event
+              {% condition event_3 %} event_name {% endcondition %}
+              THEN event
               ELSE NULL END
             ) AS event_3_first
         , MAX(
             CASE WHEN
-              {% condition event_3 %} events_sessionized.event_name {% endcondition %}
-              THEN events_sessionized.event
+              {% condition event_3 %} event_name {% endcondition %}
+              THEN event
               ELSE NULL END
             ) AS event_3_last
         , MIN(
             CASE WHEN
-              {% condition event_4 %} events_sessionized.event_name {% endcondition %}
-              THEN events_sessionized.event
+              {% condition event_4 %} event_name {% endcondition %}
+              THEN event
               ELSE NULL END
             ) AS event_4_first
           , MAX(
             CASE WHEN
-              {% condition event_4 %} events_sessionized.event_name {% endcondition %}
-              THEN events_sessionized.event
+              {% condition event_4 %} event_name {% endcondition %}
+              THEN event
               ELSE NULL END
             ) AS event_4_last
-      FROM ${events_sessionized.SQL_TABLE_NAME} AS events_sessionized
-      LEFT JOIN ${sessions.SQL_TABLE_NAME} AS sessions
-        ON events_sessionized.unique_session_id = sessions.unique_session_id
+      FROM ${events.SQL_TABLE_NAME} AS events_sessionized
+      LEFT JOIN ${session_facts.SQL_TABLE_NAME} as session_facts
+        ON events_sessionized.unique_session_id = session_facts.unique_session_id
       WHERE {% condition event_time %} event {% endcondition %}
-           and {% condition game_name %} game_name {% endcondition %}
+           and {% condition game_name %} events_sessionized.game_name {% endcondition %}
       GROUP BY 1,2,3
        ;;
   }
@@ -94,8 +95,11 @@ view: funnel_explorer {
   dimension: unique_session_id {
     type: string
     primary_key: yes
-    #     hidden: TRUE
     sql: ${TABLE}.unique_session_id ;;
+    link: {
+      label: "See session detail"
+      url: "/dashboards/Xb2IL2W022TXYLgHiOkAYV?Session%20ID={{value}}"
+    }
   }
 
   dimension: user_id {

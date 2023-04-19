@@ -546,15 +546,11 @@
     model: gaming
     explore: events
     type: single_value
-    fields: [events.number_of_spenders, events.number_of_iap_purchases]
+    fields: [events.transactions_per_spender]
     filters: {}
     limit: 500
     column_limit: 50
-    dynamic_fields: [{table_calculation: transactions_per_spender, label: Transactions
-          per Spender, expression: "${events.number_of_iap_purchases}/${events.number_of_spenders}",
-        value_format: !!null '', value_format_name: decimal_2, _kind_hint: measure,
-        _type_hint: number}]
-    hidden_fields: [events.number_of_iap_purchases, events.number_of_spenders]
+    hidden_fields: []
     series_types: {}
     listen:
       Date Range: events.event_date
@@ -749,13 +745,13 @@
     model: gaming
     explore: events
     type: single_value
-    fields: [events.number_of_ads_shown, sessions.number_of_sessions]
+    fields: [events.number_of_ads_shown, events.number_of_sesssions]
     filters:
       events.number_of_ads_shown: ">1000"
     limit: 500
     column_limit: 50
     dynamic_fields: [{table_calculation: ads_per_session, label: Ads per Session,
-        expression: "${events.number_of_ads_shown}/${sessions.number_of_sessions}",
+        expression: "${events.number_of_ads_shown}/${events.number_of_sesssions}",
         value_format: !!null '', value_format_name: decimal_1, _kind_hint: measure,
         _type_hint: number}]
     map_plot_mode: points
@@ -783,7 +779,7 @@
     map_value_colors: ["#8BC34A"]
     quantize_map_value_colors: false
     reverse_map_value_colors: true
-    hidden_fields: [events.number_of_ads_shown, sessions.number_of_sessions]
+    hidden_fields: [events.number_of_ads_shown, events.number_of_sesssions]
     series_types: {}
     note_state: expanded
     note_display: hover
@@ -813,7 +809,7 @@
     model: gaming
     explore: events
     type: table
-    fields: [events.number_of_ads_shown, events.total_ad_revenue, events.install_source]
+    fields: [events.number_of_ads_shown, events.total_ad_revenue, events.ad_network]
     filters:
       events.number_of_ads_shown: ">1000"
     sorts: [revenue_per_ad_shown desc]

@@ -1,6 +1,13 @@
 - dashboard: daily_pulse
   title: Daily Pulse
   layout: newspaper
+  embed_style:
+    background_color: ''
+    show_title: true
+    title_color: "#5c4ac3"
+    show_filters_bar: true
+    tile_text_color: "#ff7725"
+    text_tile_text_color: ''
   elements:
   - title: New Tile
     name: New Tile
@@ -106,7 +113,7 @@
     type: text
     title_text: "<span class='fa fa-smile-o'> Retention </span>"
     subtitle_text: Are our games fun?
-    row: 18
+    row: 19
     col: 0
     width: 24
     height: 2
@@ -118,13 +125,13 @@
     row: 9
     col: 0
     width: 24
-    height: 2
+    height: 3
   - name: "<span class='fa fa-usd'> Monetization </span>"
     type: text
     title_text: "<span class='fa fa-usd'> Monetization </span>"
-    subtitle_text: <p> Are we building a sustainable business? Go to <a href="/dashboards/100"
+    subtitle_text: <p> Are we building a sustainable business? Go to <a href="/dashboards/8e7moQwUXBZjCJjk5DDPnU"
       target="_blank">monetization dashboard</a></p>
-    row: 27
+    row: 28
     col: 0
     width: 24
     height: 2
@@ -378,7 +385,7 @@
       Install Source: events.install_source
       Country: events.country
       Game: events.game_name
-    row: 11
+    row: 12
     col: 0
     width: 4
     height: 2
@@ -400,20 +407,27 @@
       palette_id: f31efe28-e698-428c-8420-fcb37f2010aa
       options:
         steps: 5
+    show_totals: true
+    show_row_totals: true
     show_view_names: false
     show_row_numbers: false
-    truncate_column_names: false
-    subtotals_at_bottom: false
-    hide_totals: false
-    hide_row_totals: false
+    transpose: false
+    truncate_text: true
+    size_to_fit: false
     series_labels:
       events.number_of_users: Active Users
       events.d7_revenue_per_retained_user: D7 Revenue
       events.number_of_new_users: Installs
       events.total_install_spend: Spend
+    series_cell_visualizations:
+      events.return_on_ad_spend:
+        is_active: true
     table_theme: gray
     limit_displayed_rows: false
     enable_conditional_formatting: true
+    header_text_alignment: left
+    header_font_size: '10'
+    rows_font_size: '10'
     conditional_formatting: [{type: along a scale..., value: !!null '', background_color: !!null '',
         font_color: !!null '', color_application: {collection_id: 611da387-0e33-4239-aef0-a187c149cf88,
           palette_id: 4f09bd77-8e34-41d6-a356-12c05cdb2de5, options: {steps: 5, reverse: true}},
@@ -423,6 +437,10 @@
         bold: false, italic: false, strikethrough: false, fields: []}]
     conditional_formatting_include_totals: false
     conditional_formatting_include_nulls: false
+    truncate_column_names: false
+    subtotals_at_bottom: false
+    hide_totals: false
+    hide_row_totals: false
     stacking: ''
     trellis: ''
     show_value_labels: false
@@ -453,7 +471,10 @@
     plot_size_by_field: false
     show_null_points: true
     interpolation: linear
-    title_hidden: true
+    note_state: expanded
+    note_display: above
+    note_text: 'Recommended Action: Drill into Install Sources to see what campaigns
+      are working'
     listen:
       Date Range: events.event_date
       Drill Down: events.drill_by
@@ -461,10 +482,10 @@
       Install Source: events.install_source
       Country: events.country
       Game: events.game_name
-    row: 11
+    row: 12
     col: 10
     width: 14
-    height: 3
+    height: 7
   - title: Installs by Day
     name: Installs by Day
     model: gaming
@@ -522,7 +543,7 @@
       Install Source: events.install_source
       Country: events.country
       Game: events.game_name
-    row: 11
+    row: 12
     col: 4
     width: 6
     height: 7
@@ -592,7 +613,7 @@
       Install Source: events.install_source
       Country: events.country
       Game: events.game_name
-    row: 20
+    row: 21
     col: 12
     width: 12
     height: 7
@@ -603,7 +624,7 @@
     type: single_value
     fields: [events.d7_retention_rate]
     filters:
-      user_facts.player_first_seen_date: 30 days ago for 30 days
+      events.user_first_seen_date: 30 days ago for 30 days
     limit: 500
     column_limit: 50
     note_state: collapsed
@@ -616,7 +637,7 @@
       Install Source: events.install_source
       Country: events.country
       Game: events.game_name
-    row: 23
+    row: 24
     col: 0
     width: 4
     height: 2
@@ -627,7 +648,7 @@
     type: single_value
     fields: [events.d1_retention_rate]
     filters:
-      user_facts.player_first_seen_date: 30 days ago for 30 days
+      events.user_first_seen_date: 30 days ago for 30 days
     limit: 500
     column_limit: 50
     note_state: collapsed
@@ -640,7 +661,7 @@
       Install Source: events.install_source
       Country: events.country
       Game: events.game_name
-    row: 20
+    row: 21
     col: 0
     width: 4
     height: 3
@@ -651,7 +672,7 @@
     type: single_value
     fields: [events.d14_retention_rate]
     filters:
-      user_facts.player_first_seen_date: 30 days ago for 30 days
+      events.user_first_seen_date: 30 days ago for 30 days
     limit: 500
     column_limit: 50
     note_state: collapsed
@@ -664,93 +685,10 @@
       Install Source: events.install_source
       Country: events.country
       Game: events.game_name
-    row: 25
+    row: 26
     col: 0
     width: 4
     height: 2
-  - title: Campaign Types
-    name: Campaign Types
-    model: gaming
-    explore: events
-    type: table
-    fields: [events.campaign_type, events.return_on_ad_spend, events.total_revenue,
-      events.total_install_spend, events.number_of_new_users, events.device_platform]
-    pivots: [events.device_platform]
-    filters:
-      events.install_group: paid
-    sorts: [events.number_of_new_users desc 0, events.device_platform]
-    limit: 500
-    column_limit: 50
-    color_application:
-      collection_id: 611da387-0e33-4239-aef0-a187c149cf88
-      palette_id: f31efe28-e698-428c-8420-fcb37f2010aa
-      options:
-        steps: 5
-    show_view_names: false
-    show_row_numbers: false
-    truncate_column_names: false
-    subtotals_at_bottom: false
-    hide_totals: false
-    hide_row_totals: false
-    series_labels:
-      events.number_of_users: Active Users
-      events.d7_revenue_per_retained_user: D7 Revenue
-      events.number_of_new_users: Installs
-      events.total_install_spend: Spend
-    table_theme: gray
-    limit_displayed_rows: false
-    enable_conditional_formatting: true
-    conditional_formatting: [{type: along a scale..., value: !!null '', background_color: !!null '',
-        font_color: !!null '', color_application: {collection_id: 611da387-0e33-4239-aef0-a187c149cf88,
-          palette_id: 4f09bd77-8e34-41d6-a356-12c05cdb2de5, options: {steps: 5, reverse: true}},
-        bold: false, italic: false, strikethrough: false, fields: []}, {type: along
-          a scale..., value: !!null '', background_color: !!null '', font_color: !!null '',
-        color_application: {collection_id: 611da387-0e33-4239-aef0-a187c149cf88, palette_id: 4f09bd77-8e34-41d6-a356-12c05cdb2de5},
-        bold: false, italic: false, strikethrough: false, fields: []}]
-    conditional_formatting_include_totals: false
-    conditional_formatting_include_nulls: false
-    stacking: ''
-    trellis: ''
-    show_value_labels: false
-    label_density: 25
-    legend_position: center
-    x_axis_gridlines: false
-    y_axis_gridlines: false
-    point_style: none
-    series_colors: {}
-    series_types: {}
-    y_axes: [{label: '', orientation: left, series: [{id: events.total_revenue, name: Total
-              Revenue, axisId: events.total_revenue}], showLabels: true, showValues: true,
-        unpinAxis: false, tickDensity: default, type: linear}, {label: !!null '',
-        orientation: right, series: [{id: events.average_revenue_per_paying_user,
-            name: ARPPU (IAP), axisId: events.average_revenue_per_paying_user}], showLabels: true,
-        showValues: true, unpinAxis: false, tickDensity: default, type: linear}]
-    y_axis_combined: true
-    show_y_axis_labels: true
-    show_y_axis_ticks: true
-    y_axis_tick_density: default
-    y_axis_tick_density_custom: 5
-    show_x_axis_label: false
-    show_x_axis_ticks: false
-    x_axis_scale: auto
-    y_axis_scale_mode: linear
-    x_axis_reversed: false
-    y_axis_reversed: false
-    plot_size_by_field: false
-    show_null_points: true
-    interpolation: linear
-    title_hidden: true
-    listen:
-      Date Range: events.event_date
-      Drill Down: events.drill_by
-      Platform: events.device_platform
-      Install Source: events.install_source
-      Country: events.country
-      Game: events.game_name
-    row: 14
-    col: 10
-    width: 14
-    height: 4
   - title: "% New Paid Users"
     name: "% New Paid Users"
     model: gaming
@@ -826,7 +764,7 @@
       Install Source: events.install_source
       Country: events.country
       Game: events.game_name
-    row: 13
+    row: 14
     col: 0
     width: 4
     height: 5
@@ -835,10 +773,10 @@
     model: gaming
     explore: events
     type: looker_line
-    fields: [events.d1_retention_rate, user_facts.player_first_seen_date, events.d7_retention_rate]
+    fields: [events.d1_retention_rate, events.user_first_seen_date, events.d7_retention_rate]
     filters:
-      user_facts.player_first_seen_date: 30 days ago for 30 days
-    sorts: [user_facts.player_first_seen_date desc]
+      events.user_first_seen_date: 30 days ago for 30 days
+    sorts: [events.user_first_seen_date desc]
     limit: 500
     column_limit: 50
     color_application:
@@ -896,7 +834,7 @@
       Install Source: events.install_source
       Country: events.country
       Game: events.game_name
-    row: 20
+    row: 21
     col: 4
     width: 8
     height: 7
@@ -988,7 +926,7 @@
       Install Source: events.install_source
       Country: events.country
       Game: events.game_name
-    row: 29
+    row: 30
     col: 0
     width: 12
     height: 6
@@ -1012,7 +950,7 @@
       Install Source: events.install_source
       Country: events.country
       Game: events.game_name
-    row: 29
+    row: 30
     col: 12
     width: 4
     height: 6
@@ -1073,7 +1011,7 @@
       Install Source: events.install_source
       Country: events.country
       Game: events.game_name
-    row: 29
+    row: 30
     col: 16
     width: 8
     height: 6
