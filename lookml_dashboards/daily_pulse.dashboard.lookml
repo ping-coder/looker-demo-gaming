@@ -624,7 +624,7 @@
     type: single_value
     fields: [events.d7_retention_rate]
     filters:
-      events.user_first_seen_date: 30 days ago for 30 days
+      events.user_first_seen_date: 2023/02/10 to 2023/03/03
     limit: 500
     column_limit: 50
     note_state: collapsed
@@ -648,7 +648,7 @@
     type: single_value
     fields: [events.d1_retention_rate]
     filters:
-      events.user_first_seen_date: 30 days ago for 30 days
+      events.user_first_seen_date: 2023/02/10 to 2023/03/03
     limit: 500
     column_limit: 50
     note_state: collapsed
@@ -672,7 +672,7 @@
     type: single_value
     fields: [events.d14_retention_rate]
     filters:
-      events.user_first_seen_date: 30 days ago for 30 days
+      events.user_first_seen_date: 2023/02/10 to 2023/03/03
     limit: 500
     column_limit: 50
     note_state: collapsed
@@ -775,7 +775,7 @@
     type: looker_line
     fields: [events.d1_retention_rate, events.user_first_seen_date, events.d7_retention_rate]
     filters:
-      events.user_first_seen_date: 30 days ago for 30 days
+      events.user_first_seen_date: 2023/02/10 to 2023/03/03
     sorts: [events.user_first_seen_date desc]
     limit: 500
     column_limit: 50
@@ -1047,7 +1047,7 @@
   - name: Date Range
     title: Date Range
     type: field_filter
-    default_value: 30 days ago for 30 days
+    default_value: 2023/02/10 to 2023/03/03
     allow_multiple_values: true
     required: false
     model: gaming

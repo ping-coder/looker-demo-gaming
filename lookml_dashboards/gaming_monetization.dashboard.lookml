@@ -279,7 +279,7 @@
     pivots: [events.country]
     filters:
       events.retention_day: "<=7"
-      events.is_top_10_country: 'Yes'
+      # events.is_top_10_country: 'Yes'
     sorts: [events.country 0, events.retention_day]
     limit: 500
     column_limit: 50
@@ -882,7 +882,7 @@
   - name: Date Range
     title: Date Range
     type: field_filter
-    default_value: 30 days ago for 30 days
+    default_value: 2023/02/10 to 2023/03/03
     allow_multiple_values: true
     required: false
     model: gaming
